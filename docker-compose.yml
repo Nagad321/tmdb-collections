@@ -1,0 +1,21 @@
+services:
+  tmdb-collections:
+    build: .
+    container_name: tmdb-collections
+    restart: unless-stopped
+
+    ports:
+      - "5600:5600"
+
+    environment:
+      NODE_ENV: production
+      PORT: 5600
+      TMDB_API_KEY: ${TMDB_API_KEY}
+      FANART_API_KEY: ${FANART_API_KEY}
+      NEW_RELIC_ENABLED: "false"
+
+    volumes:
+      - tmdb_collections_cache:/app/sqlite
+
+volumes:
+  tmdb_collections_cache:
