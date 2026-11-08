@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="https://github.com/youchi1/tmdb-collections/raw/main/Images/favicon.png" type="image/x-icon" />
     <title>TMDB Collections - Stremio Addon</title>
-    <script src="/languages.js"></script>
     <style>
       body {
         margin: 0;
@@ -448,9 +447,8 @@
         
         <div class="config-option">
           <label for="language">Language</label>
-          <select id="language" class="language-select">
-            <option value="en">English (Default)</option>
-            <!-- Options will be populated from languages data -->
+          <select id="language" class="language-select" aria-label="Lingua" disabled>
+            <option value="it" selected>Italian (Italiano)</option>
           </select>
         </div>
         
@@ -583,34 +581,6 @@
       const installButton = document.querySelector('.install-button');
       const dropdownToggle = document.querySelector('.install-dropdown-toggle');
       
-      // Populate language select box
-      function populateLanguageSelect() {
-        const languageSelect = document.getElementById('language');
-        
-        // Sort languages by name or english_name
-        const sortedLanguages = [...languages].sort((a, b) => {
-          const aName = a.english_name || a.name;
-          const bName = b.english_name || b.name;
-          return aName.localeCompare(bName);
-        });
-        
-        // Add options to select box
-        sortedLanguages.forEach(lang => {
-          if (lang.iso_639_1 && (lang.name || lang.english_name)) {
-            const displayName = lang.name ? `${lang.english_name} (${lang.name})` : lang.english_name;
-            const option = document.createElement('option');
-            option.value = lang.iso_639_1;
-            option.textContent = displayName;
-            languageSelect.appendChild(option);
-          }
-        });
-        
-        // Add event listener for language change
-        languageSelect.addEventListener('change', updateUrlWithConfig);
-      }
-      
-      // Initialize language select after DOM is loaded
-      document.addEventListener('DOMContentLoaded', populateLanguageSelect);
       
       // Function to update URL with current configuration
       function updateUrlWithConfig() {
@@ -625,7 +595,7 @@
         const enableAdultContent = document.getElementById('enableAdultContent').checked;
         const enableSearch = document.getElementById('enableSearch').checked;
         const enableCollectionFromMovie = document.getElementById('enableCollectionFromMovie').checked;
-        const language = document.getElementById('language').value;
+        const language = 'it';
         
         const catalogItems = document.querySelectorAll('.catalog-item');
         const enabledCatalogs = Array.from(catalogItems)
@@ -680,10 +650,8 @@
               document.getElementById('enableCollectionFromMovie').checked = config.enableCollectionFromMovie;
             }
             
-            // Apply language setting
-            if (config.language !== undefined) {
-              document.getElementById('language').value = config.language;
-            }
+            // La lingua è sempre italiana, anche con vecchi URL di configurazione.
+            document.getElementById('language').value = 'it';
             
             // Apply catalog settings
             if (config.catalogList && Array.isArray(config.catalogList)) {
